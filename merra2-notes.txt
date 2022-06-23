@@ -1,0 +1,25 @@
+Download notes
+
+Bounding box 59 to 84 N and -11 to -73 E
+
+Time period: monthly
+
+MERRA 2
+
+M2T1NXINT: Vertically Integrated Diagnostics
+Version 5.12.4
+Eric and Tyler used these for snowfall
+
+Go to: https://disc.gsfc.nasa.gov/
+Search for: M2T1NXINT_5.12.4 and click "Subset/Get Data" on the first option.
+Download method: GES DISC Subsetter
+Time of day: Leave blank to get daily mean
+
+PRECSN: Snowfall (kg m-2 s-1)
+
+ERA5 
+
+Mean snowfall rate (kg m-2 s-1)
+Variable name: mean_snowfall_rate
+
+Snowfall (m w.e.)
