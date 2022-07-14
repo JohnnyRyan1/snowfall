@@ -1,0 +1,11 @@
+--2022-06-23 10:13:59--  https://goldsmr4.gesdisc.eosdis.nasa.gov/daac-bin/OTF/HTTP_services.cgi?FILENAME=%2Fdata%2FMERRA2%2FM2T1NXINT.5.12.4%2F2000%2F08%2FMERRA2_200.tavg1_2d_int_Nx.20000821.nc4&FORMAT=bmM0Lw&BBOX=59%2C-73%2C84%2C-11&LABEL=MERRA2_200.tavg1_2d_int_Nx.20000821.SUB.nc&FLAGS=1&SHORTNAME=M2T1NXINT&SERVICE=L34RS_MERRA2&VERSION=1.02&DATASET_VERSION=5.12.4&VARIABLES=PRECSN
+Resolving goldsmr4.gesdisc.eosdis.nasa.gov (goldsmr4.gesdisc.eosdis.nasa.gov)... 198.118.197.95, 2001:4d0:241a:4041::95
+Connecting to goldsmr4.gesdisc.eosdis.nasa.gov (goldsmr4.gesdisc.eosdis.nasa.gov)|198.118.197.95|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 41115 (40K) [application/octet-stream]
+Saving to: ‘tmp/MERRA2_200.tavg1_2d_int_Nx.20000821.SUB.nc’
+
+     0K .......... .......... .......... ..........           100%  566K=0.07s
+
+2022-06-23 10:14:01 (566 KB/s) - ‘tmp/MERRA2_200.tavg1_2d_int_Nx.20000821.SUB.nc’ saved [41115/41115]
+
