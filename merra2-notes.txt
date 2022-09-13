@@ -18,11 +18,3 @@ Time of day: Leave blank to get daily mean
 Aggregate snowfall by *mean* to get daily
 
 PRECSN: Snowfall (kg m-2 s-1)
-
-
-ERA5 
-
-Mean snowfall rate (kg m-2 s-1)
-Variable name: mean_snowfall_rate
-
-Snowfall (m w.e.)
