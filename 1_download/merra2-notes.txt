@@ -1,0 +1,21 @@
+Atmospheric reanalysis download notes
+
+MERRA-2 Version 5.12.4 is NASA's latest product
+
+M2T1NXFLX: Surface flux diagnostics e.g. snowfall, wind speed
+M2T1NXRAD: Radiation diagnostics e.g. downward shortwave and longwave radiation, surface albedo
+M2T1NXSLV: Commonly used meteorology diagnostics e.g. 2 m air temperature, humidity
+M2T3NXGLC: Land ice surface diagnostics e.g. surface albedo
+
+*You might check if surface albedo in M2T1NXRAD and M2T3NXGLC are the same.*
+
+Time resolution: preferably 1 hour
+
+Go to: https://disc.gsfc.nasa.gov/
+Search for: M2T1NXFLX, M2T1NXRAD, or M2T1NXSLV and click "Subset/Get Data" on the first option.
+Download method: GES DISC Subsetter
+Refine Date Range: Jan 1, 2016 to Dec 31, 2016
+Refine Region: Add a small bounding box around the weather station. Ideally we only get one MERRA-2 grid cell but OK if we get a few surrounding grid cells
+Variables: Tick ones we need 
+Time of day: Leave blank to get full temporal resolution
+Grid: Leave as it is

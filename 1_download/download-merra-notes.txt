@@ -1,0 +1,18 @@
+### MERRA2 DOWNLOAD ###
+
+# Configure your username and password for authentication using a .netrc file
+cd ~
+touch .netrc
+echo "machine urs.earthdata.nasa.gov login johnnyryan password Northbar39" >> .netrc
+chmod 0600 .netrc
+
+# Create a cookie file
+cd ~
+touch .urs_cookies
+
+# WGET command to download multiple files.
+wget --load-cookies ~/.urs_cookies --save-cookies ~/.urs_cookies --auth-no-challenge=on --keep-session-cookies --no-check-certificate --content-disposition -i /Users/jryan4/Dropbox\ \(University\ of\ Oregon\)/research/snowfall/data/links/subset_M2TMNXINT_5.12.4_19800101_20220531_Monthly_PRECSN_Greenland.txt --directory-prefix=/Users/jryan4/Dropbox\ \(University\ of\ Oregon\)/research/snowfall/data/merra_snowfall_monthly/ -nd
+
+# WGET command to download a single file (note the quotes)
+wget --load-cookies ~/.urs_cookies --save-cookies ~/.urs_cookies --auth-no-challenge=on --keep-session-cookies --no-check-certificate --content-disposition "https://goldsmr4.gesdisc.eosdis.nasa.gov/daac-bin/OTF/HTTP_services.cgi?FILENAME=%2Fdata%2FMERRA2%2FM2T1NXINT.5.12.4%2F2000%2F01%2FMERRA2_200.tavg1_2d_int_Nx.20000105.nc4&FORMAT=bmM0Lw&BBOX=59%2C-73%2C84%2C-11&LABEL=MERRA2_200.tavg1_2d_int_Nx.20000105.SUB.nc&FLAGS=1&SHORTNAME=M2T1NXINT&SERVICE=L34RS_MERRA2&VERSION=1.02&DATASET_VERSION=5.12.4&VARIABLES=PRECSN" --directory-prefix=/media/johnny/Cooley_Data/Johnny/Clouds_Data/MYD06_L2/ -nd
+
