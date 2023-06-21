@@ -1,0 +1,8 @@
+xarray
+spyder
+numpy
+netCDF4
+pandas
+matplotlib
+dask
+pyresample
