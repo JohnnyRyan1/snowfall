@@ -17,7 +17,7 @@ import numpy as np
 import pandas as pd
 
 # Define user
-user = 'jryan4'
+user = 'johnnyryan'
 
 # Define path
 path = '/Users/' + user + '/Dropbox (University of Oregon)/research/snowfall/data/'
@@ -34,6 +34,9 @@ ismip_x, ismip_y = np.meshgrid(ismip_1km['x'].values, ismip_1km['y'].values)
 # Define years
 years = np.arange(2001, 2022)
 
+# Read stats DataFrame
+all_stats = pd.read_csv(path + 'all_stats.csv')
+
 
 #%%
 
@@ -42,7 +45,7 @@ for year in years:
     print('Processing... %.0f' %year)
     
     # Import MAR grids
-    mar = xr.open_dataset(path + 'mar_resample/mar_' + str(year) + '.nc')
+    mar_curr = xr.open_dataset(path + 'mar_resample/mar_' + str(year) + '.nc')
     mar_prev = xr.open_dataset(path + 'mar_resample/mar_' + str(year - 1) + '.nc')
     
     # Import MODIS grids
@@ -62,16 +65,16 @@ for year in years:
     first_55_count, first_55_median, first_55_mean = [], [], []
     albedo_median, albedo_mean = [], [] 
     elevation, region = [], []
-    jun_pdd, jul_pdd, spr_temp, jun_temp = [], [], [], []
-    max_snow, max_snow_day, snow_sum = [], [], []
+    jun_pdd = []
+    snow_sum = []
     grid_cell_i, grid_cell_j, lon, lat = [], [], [], []
     
     # Loop over every MAR grid cell
-    for i in range(mar['x'].shape[0] - 1):
-        for j in range(mar['y'].shape[0] - 1):
+    for i in range(mar_curr['x'].shape[0] - 1):
+        for j in range(mar_curr['y'].shape[0] - 1):
             # Get coordinates corners
-            min_y, min_x, max_y, max_x = mar['y'].values[j], mar['x'].values[i],\
-                                         mar['y'].values[j+1], mar['x'].values[i+1]
+            min_y, min_x, max_y, max_x = mar_curr['y'].values[j], mar_curr['x'].values[i],\
+                                         mar_curr['y'].values[j+1], mar_curr['x'].values[i+1]
     
             # Get values from MODIS
             array = ((ismip_y >= min_y) & (ismip_y < max_y) &\
@@ -88,33 +91,18 @@ for year in years:
                 if (count > 0) & (np.nansum(ice_mask_first_55[mask]) > 0):
                     #print('stoppping...')
                     #print(i,j)
-                    if np.isfinite(mar['t2m'][:, j, i].values).sum() > 0:
-                        if np.isfinite(mar['sd2'][:, j, i].values).sum() > 0:
+                    if np.isfinite(mar_curr['t2m'][:, j, i].values).sum() > 0:
+                        if np.isfinite(mar_curr['sf'][:, j, i].values).sum() > 0:
                                            
                             # June positive degree day
-                            pdd = mar['t2m'][:, j, i]
+                            pdd = mar_curr['t2m'][:, j, i]
                             pdd[pdd < 0] = 0
                                                         
                             jun_pdd.append(np.mean(pdd[151:181]).values)
                             
-                            # July positive degree day
-                            jul_pdd.append(np.mean(pdd[181:212]).values)
-                            
-                            # Mean Spring air temperature
-                            t = mar['t2m'][:, j, i]
-                            spr_temp.append(np.mean(t[60:151]).values)
-                            
-                            # Mean June air temperature
-                            jun_temp.append(np.mean(t[151:181]).values)
-                            
-                            # Max snow depth, max snow depth day
-                            max_snow.append(mar['sd2'][:, j, i].values[mar['sd2'][:, j, i].argmax().values])
-                            max_snow_day.append(mar['time'][[mar['t2m'][:, j, i].argmax().values]].values[0])
-                            
                             # Snowfall from Oct 1 to May 31
-                            snow_date = mar['sd2'][:, j, i].argmax().values
-                            sf_curr = mar['sf'][:,j,i][0:snow_date].sum().values
-                            sf_prev = mar_prev['sf'][:, j, i][273:].sum().values
+                            sf_curr = mar_curr['sf'][:,j,i][0:151].sum().values
+                            sf_prev = mar_prev['sf'][:,j,i][273:].sum().values
                             snow_sum.append(sf_curr + sf_prev)
                             
                             # Grid cell
@@ -153,13 +141,12 @@ for year in years:
     # Put in DataFrame
     df = pd.DataFrame(list(zip(lon, lat, first_55_count, first_55_median, first_55_mean,
                                albedo_median, albedo_mean, elevation, region, 
-                               max_snow, max_snow_day, jun_pdd, jul_pdd, spr_temp, jun_temp, snow_sum,
+                               jun_pdd, snow_sum,
                                grid_cell_i, grid_cell_j)))
             
     df.columns = ['lon', 'lat', 'first_55_count', 'first_55_median', 'first_55_mean', 
                   'albedo_median', 'albedo_mean', 'elevation', 'region', 
-                  'max_snow', 'max_snow_day', 'jun_pdd', 'jul_pdd', 
-                  'spr_temp', 'jun_temp', 'snow_sum',
+                  'jun_pdd', 'snow_sum',
                   'grid_cell_i', 'grid_cell_j']
     
     # Re-index

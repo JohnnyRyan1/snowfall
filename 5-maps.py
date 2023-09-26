@@ -125,7 +125,8 @@ second_cmap = ListedColormap(second_cmap)
 all_stats = pd.read_csv(path + 'all_stats.csv')
 
 # Identify three indexes in different regions
-ids = [82, 89, 126]
+#ids = [82, 89, 126]
+ids = [85, 90, 162]
 
 # Define zero array
 empty = np.zeros((merra['t2m'].shape[1], merra['t2m'].shape[2]))
@@ -150,8 +151,55 @@ fig.savefig(savepath + 'fig_sx_maps.pdf')
 
 #%%
 
+###############################################################################
+# Region version
+###############################################################################
+
+# Define empty array
+sig_t = np.zeros((merra['t2m'].shape[1], merra['t2m'].shape[2]))
+
+# Assign values to grid
+for r in range(all_stats.shape[0]):
+    sig_t[all_stats['grid_cell_j'].iloc[r]][all_stats['grid_cell_i'].iloc[r]] = all_stats['region'].iloc[r]
+
+sig_t[sig_t == 0] = np.nan
 
 
+#%%
+
+
+# Save as NetCDF
+ds_data = xr.Dataset(
+data_vars={
+    "sig_t": (("y", "x"), sig_t.astype('float32')),
+
+},
+
+coords={
+    "y": (('y',), merra['y'].values),
+    "x": (('x',), merra['x'].values),    
+},
+
+attrs={
+    "Produced": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+    "Author":'Johnny Ryan', 
+    "Email":'jryan4@uoregon.edu'
+},
+)
+
+#%%
+squares = sig_t
+squares[np.isnan(squares)] = 0
+
+fig, (ax1) = plt.subplots(nrows=1, ncols=1, figsize=(15,15), layout='constrained')
+ax1.set_aspect('equal', adjustable='box')
+
+ax1.pcolormesh(ds_data['x'], ds_data['y'], squares, edgecolor='k',
+               cmap='gist_ncar_r')
+
+ax1.tick_params(labelbottom=False)   
+ax1.tick_params(labelleft=False)   
+fig.savefig(savepath + 'fig_sx_region_maps.pdf')
 
 
 

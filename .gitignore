@@ -1,3 +1,5 @@
 tmp/
-1_download/
+1-download/
 .venv/
+old/
+*.DS_Store

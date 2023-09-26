@@ -21,13 +21,13 @@ from matplotlib.offsetbox import AnchoredText
 
 
 # Define user
-user = 'johnnyryan'
+user = 'jryan4'
 
 # Define path
 path = '/Users/' + user + '/Dropbox (University of Oregon)/research/snowfall/data/'
 
 # Define save path
-savepath = '/Users/' + user + '/Dropbox (University of Oregon)/research/snowfall/manuscript/figures/'
+savepath = '/Users/' + user + '/Dropbox (University of Oregon)/research/snowfall/revision/'
 
 # Read stats DataFrame
 all_stats = pd.read_csv(path + 'all_stats.csv')
@@ -212,6 +212,15 @@ spr_snow.drop(columns = ['grid_cell_i', 'grid_cell_j'], inplace=True)
 
 #%%
 
+# Whole ablation zone
+trend,h,p,z = mk_test(all_j.mean(axis=0),0.05)
+
+trend,h,p,z = mk_test(all_s.mean(axis=0),0.05)
+
+trend,h,p,z = mk_test(all_win.mean(axis=0),0.05)
+
+#%%
+
 output_spr_temp = []
 output_win_temp = []
 output_jun_temp = []
@@ -273,8 +282,8 @@ win_increases / counts
 win_snow_decreases = win_snow_df[win_snow_df['trend'] == 'decreasing'].groupby(by='region')['trend'].count()
 win_snow_decreases / counts
 
-spr_snow_decreases = spr_snow_df[spr_snow_df['trend'] == 'decreasing'].groupby(by='region')['trend'].count()
-spr_snow_decreases / counts
+win_snow_increases = win_snow_df[win_snow_df['trend'] == 'increasing'].groupby(by='region')['trend'].count()
+win_snow_increases / counts
 
 #%%
 
@@ -299,12 +308,13 @@ win_snow_norm = all_s.sub(all_s.mean(axis=1), axis=0)
 # Stats
 slope1, intercept1, r_value1, p_value1, std_err1 = stats.linregress(np.arange(1981, 2022), jun_temp_norm.mean().values)
 slope2, intercept2, r_value2, p_value2, std_err2 = stats.linregress(np.arange(1981, 2022), win_snow_norm.mean().values)
+slope3, intercept3, r_value3, p_value3, std_err3 = stats.linregress(np.arange(1981, 2022), win_temp_norm.mean().values)
 
 
 #%%
 
 # Plot
-fig, (ax2, ax1) = plt.subplots(nrows=2, ncols=1, figsize=(10, 5), 
+fig, (ax2, ax1, ax3) = plt.subplots(nrows=3, ncols=1, figsize=(12, 8), 
                                       layout='constrained', sharex=True)
 
 ax1.plot(np.arange(1981, 2022), jun_temp_norm.mean().values, color='#c1272d', lw=2)
@@ -319,22 +329,35 @@ ax2.plot(np.arange(1981, 2022), np.arange(1981, 2022)*slope2 + intercept2,
 ax2.fill_between(np.arange(1981, 2022), np.percentile(win_snow_norm*365, 10, axis=0), 
                  np.percentile(win_snow_norm*365, 90, axis=0), color='grey', alpha=0.5)
 
+ax3.plot(np.arange(1981, 2022), win_temp_norm.mean().values, color='#e34a33', lw=2)
+ax3.plot(np.arange(1981, 2022), np.arange(1981, 2022)*slope1 + intercept1, 
+         ls='dashed', lw=2, color='k')
+ax3.fill_between(np.arange(1981, 2022), np.percentile(win_temp_norm, 10, axis=0), 
+                 np.percentile(win_temp_norm, 90, axis=0), color='grey', alpha=0.5)
+
 ax1.set_ylim(-4, 4)
 #ax2.set_ylim(-2,2)
 ax2.set_xlim(1981, 2021)
-ax1.set_ylabel('Mean June air temp.\n anomaly (K)', fontsize=14)
-ax2.set_ylabel('Cumulative snowfall \n Oct 1 to May 31 (m)', fontsize=14)
+ax1.set_ylabel('June air temp. \n anomaly (K)', fontsize=14)
+ax2.set_ylabel('Cumulative snowfall \n [Oct 1 to May 31] (m)', fontsize=14)
+ax3.set_ylabel('Winter air temp. anomaly \n [Oct 1 to May 31] (K)', fontsize=14)
+
 ax1.tick_params(axis='both', which='major', labelsize=14)
 ax2.tick_params(axis='both', which='major', labelsize=14)
+ax3.tick_params(axis='both', which='major', labelsize=14)
+
 ax1.grid(ls='dashed', lw=1, zorder=1)
 ax2.grid(ls='dashed', lw=1, zorder=1)
+ax3.grid(ls='dashed', lw=1, zorder=1)
 
-ax1.text(0.01, 0.89, "a", fontsize=24, transform=ax1.transAxes)
-ax2.text(0.01, 0.85, "b", fontsize=24, transform=ax2.transAxes)
+ax1.text(0.01, 0.85, "b", fontsize=24, transform=ax1.transAxes)
+ax2.text(0.01, 0.85, "a", fontsize=24, transform=ax2.transAxes)
+ax3.text(0.01, 0.85, "c", fontsize=24, transform=ax3.transAxes)
 
 # Add stats
 textstr = '\n'.join((
-    r'trend = +%.2f K yr$^{-1}$' % (slope1),))
+    r'trend = +%.2f K yr$^{-1}$' % (slope1),
+    r'p = %.2f' % p_value1))
 text_box = AnchoredText(textstr, frameon=True, loc=4, pad=0.5, prop=dict(size=13))
 text_box.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
 plt.setp(text_box.patch, facecolor='white', alpha=0.7)
@@ -342,13 +365,24 @@ ax1.add_artist(text_box)
 
 # Add stats
 textstr = '\n'.join((
-    r'trend = %.2f m yr$^{-1}$' % (slope2),))
+    r'trend = %.2f m yr$^{-1}$' % (slope2),
+    r'p = %.2f' % p_value2))
 text_box = AnchoredText(textstr, frameon=True, loc=4, pad=0.5, prop=dict(size=13))
 text_box.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
 plt.setp(text_box.patch, facecolor='white', alpha=0.7)
 ax2.add_artist(text_box)
 
-fig.savefig(savepath + 'fig_sx_trends.pdf')
+# Add stats
+textstr = '\n'.join((
+    r'trend = +%.2f K yr$^{-1}$' % (slope3),
+    r'p = %.3f' % p_value3))
+text_box = AnchoredText(textstr, frameon=True, loc=4, pad=0.5, prop=dict(size=13))
+text_box.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
+plt.setp(text_box.patch, facecolor='white', alpha=0.7)
+ax3.add_artist(text_box)
+
+
+fig.savefig(savepath + 'fig_3_trends.png', dpi=300)
 
 
 

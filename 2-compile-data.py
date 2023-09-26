@@ -19,13 +19,13 @@ import statsmodels.api as sm
 from matplotlib.offsetbox import AnchoredText
 
 # Define user
-user = 'johnnyryan'
+user = 'jryan4'
 
 # Define path
 path = '/Users/' + user + '/Dropbox (University of Oregon)/research/snowfall/data/'
 
 # Define save path
-savepath = '/Users/' + user + '/Dropbox (University of Oregon)/research/snowfall/manuscript/figures/'
+savepath = '/Users/' + user + '/Dropbox (University of Oregon)/research/snowfall/revision/'
 
 # Define years and regions
 years = np.arange(2001, 2022)
@@ -187,11 +187,14 @@ all_stats[np.abs(all_stats['coeffs_t']) > all_stats['coeffs_s']]['region']
 
 #%%
 
-# Plot three good r2 values
+# Plot three grid cells
 all_stats['combined'] = all_stats['r_values_t'] + all_stats['r_values_s']
 
+# Print numbers
+all_stats.sort_values(by='combined', ascending=False)[['r_values_t', 'r_values_s', 'region']].head(20)
+
 # Identify three indexes in different regions
-ids = [85, 90, 135]
+ids = [85, 90, 162]
 
 # Standardize    
 t1 = (all_jun.iloc[ids[0]].values - np.mean(all_jun.iloc[ids[0]].values)) / np.std(all_jun.iloc[ids[0]].values)
@@ -231,7 +234,7 @@ ax2.plot(x, x*slope2 + intercept2, color='k', lw=1)
 #                 ((x+conf2[1])*slope2 + intercept2), color='grey', alpha=0.4)
 
 ax3.scatter(s3, e3, color='#0000a7', zorder=2, s=75, alpha=0.6)
-#ax3.plot(x, x*slope3 + intercept3, color='k', lw=1)
+ax3.plot(x, x*slope3 + intercept3, color='k', lw=1)
 #ax3.fill_between(x, ((x+conf3[0])*slope3 + intercept3), 
 #                 ((x+conf3[1])*slope3 + intercept3), color='grey', alpha=0.4)
 
@@ -269,48 +272,54 @@ for ax in [ax1, ax2, ax3, ax4, ax5, ax6]:
 # Add stats
 textstr = '\n'.join((
     r'R$^{2}$ = %.2f' % (r_value1**2),
-    r'slope = %.1f' %all_stats['coeffs_s'][ids[0]]))
-text_box = AnchoredText(textstr, frameon=True, loc=1, pad=0.5, prop=dict(size=13))
+    r'slope = %.1f' %all_stats['coeffs_s'][ids[0]],
+    r'p = %.3f' % p_value1))
+text_box = AnchoredText(textstr, frameon=True, loc=4, pad=0.5, prop=dict(size=13))
 text_box.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
 plt.setp(text_box.patch, facecolor='white', alpha=0.7)
 ax1.add_artist(text_box)
 
 textstr = '\n'.join((
     r'R$^{2}$ = %.2f' % (r_value2**2),
-    r'slope = %.1f' %all_stats['coeffs_s'][ids[1]]))
-text_box = AnchoredText(textstr, frameon=True, loc=1, pad=0.5, prop=dict(size=13))
+    r'slope = %.1f' %all_stats['coeffs_s'][ids[1]],
+    r'p = %.3f' % p_value2))
+text_box = AnchoredText(textstr, frameon=True, loc=4, pad=0.5, prop=dict(size=13))
 text_box.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
 plt.setp(text_box.patch, facecolor='white', alpha=0.7)
 ax2.add_artist(text_box)
 
 textstr = '\n'.join((
     r'R$^{2}$ = %.2f' % (r_value3**2),
-    r'slope = %.1f' %all_stats['coeffs_s'][ids[2]]))
-text_box = AnchoredText(textstr, frameon=True, loc=1, pad=0.5, prop=dict(size=13))
+    r'slope = %.1f' %all_stats['coeffs_s'][ids[2]],
+    r'p = %.3f' % p_value3))
+text_box = AnchoredText(textstr, frameon=True, loc=4, pad=0.5, prop=dict(size=13))
 text_box.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
 plt.setp(text_box.patch, facecolor='white', alpha=0.7)
 ax3.add_artist(text_box)
 
 textstr = '\n'.join((
     r'R$^{2}$ = %.2f' % (r_value4**2),
-    r'slope = %.1f' %all_stats['coeffs_t'][ids[0]]))
-text_box = AnchoredText(textstr, frameon=True, loc=4, pad=0.5, prop=dict(size=13))
+    r'slope = %.1f' %all_stats['coeffs_t'][ids[0]],
+    r'p < %.3f' % 0.001))
+text_box = AnchoredText(textstr, frameon=True, loc=1, pad=0.5, prop=dict(size=13))
 text_box.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
 plt.setp(text_box.patch, facecolor='white', alpha=0.7)
 ax4.add_artist(text_box)
 
 textstr = '\n'.join((
     r'R$^{2}$ = %.2f' % (r_value5**2),
-    r'slope = %.1f' %all_stats['coeffs_t'][ids[1]]))
-text_box = AnchoredText(textstr, frameon=True, loc=4, pad=0.5, prop=dict(size=13))
+    r'slope = %.1f' %all_stats['coeffs_t'][ids[1]],
+    r'p < %.3f' % 0.001))
+text_box = AnchoredText(textstr, frameon=True, loc=1, pad=0.5, prop=dict(size=13))
 text_box.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
 plt.setp(text_box.patch, facecolor='white', alpha=0.7)
 ax5.add_artist(text_box)
 
 textstr = '\n'.join((
     r'R$^{2}$ = %.2f' % (r_value6**2),
-    r'slope = %.1f' %all_stats['coeffs_t'][ids[2]]))
-text_box = AnchoredText(textstr, frameon=True, loc=4, pad=0.5, prop=dict(size=13))
+    r'slope = %.1f' %all_stats['coeffs_t'][ids[2]],
+    r'p < %.3f' % 0.001))
+text_box = AnchoredText(textstr, frameon=True, loc=3, pad=0.5, prop=dict(size=13))
 text_box.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
 plt.setp(text_box.patch, facecolor='white', alpha=0.7)
 ax6.add_artist(text_box)
@@ -324,10 +333,359 @@ ax6.text(0.03, 0.87, "f", fontsize=24, transform=ax6.transAxes)
 
 ax1.text(0.37, 1.02, "Southwest", fontsize=16, transform=ax1.transAxes)
 ax2.text(0.30, 1.02, "Central West", fontsize=16, transform=ax2.transAxes)
-ax3.text(0.45, 1.02, "North", fontsize=16, transform=ax3.transAxes)
+ax3.text(0.35, 1.02, "South East", fontsize=16, transform=ax3.transAxes)
 
-fig.savefig(savepath + 'fig_sx_sensitivity_analysis.pdf')
+fig.savefig(savepath + 'fig_2_sensitivity_analysis.png', dpi=300)
 
+
+#%%
+
+###############################################################################
+# Region version of Figure 2
+###############################################################################
+
+# Plot three grid cells
+all_stats['combined'] = all_stats['r_values_t'] + all_stats['r_values_s']
+
+# Standardize
+all_jun_mean = np.repeat(np.array(all_jun.mean(axis=1))[:, np.newaxis], 21, axis=1)
+all_jun_std = np.repeat(np.array(all_jun.std(axis=1))[:, np.newaxis], 21, axis=1)
+std_t = (np.array(all_jun) - all_jun_mean) / all_jun_std
+
+all_s_mean = np.repeat(np.array(all_s.mean(axis=1))[:, np.newaxis], 21, axis=1)
+all_s_std = np.repeat(np.array(all_s.std(axis=1))[:, np.newaxis], 21, axis=1)
+std_s = (np.array(all_s) - all_s_mean) / all_s_std
+
+# Average by region
+slope1, intercept1, r_value1, p_value1, std_err1 = stats.linregress(np.mean(std_s[np.array(all_stats['region'] == 1)], axis=0), np.mean(np.array(all_e)[np.array(all_stats['region'] == 1)], axis=0))
+slope2, intercept2, r_value2, p_value2, std_err2 = stats.linregress(np.mean(std_s[np.array(all_stats['region'] == 2)], axis=0), np.mean(np.array(all_e)[np.array(all_stats['region'] == 2)], axis=0))
+slope3, intercept3, r_value3, p_value3, std_err3 = stats.linregress(np.mean(std_s[np.array(all_stats['region'] == 3)], axis=0), np.mean(np.array(all_e)[np.array(all_stats['region'] == 3)], axis=0))
+slope4, intercept4, r_value4, p_value4, std_err4 = stats.linregress(np.mean(std_s[np.array(all_stats['region'] == 4)], axis=0), np.mean(np.array(all_e)[np.array(all_stats['region'] == 4)], axis=0))
+slope5, intercept5, r_value5, p_value5, std_err5 = stats.linregress(np.mean(std_s[np.array(all_stats['region'] == 5)], axis=0), np.mean(np.array(all_e)[np.array(all_stats['region'] == 5)], axis=0))
+slope6, intercept6, r_value6, p_value6, std_err6 = stats.linregress(np.mean(std_s[np.array(all_stats['region'] == 6)], axis=0), np.mean(np.array(all_e)[np.array(all_stats['region'] == 6)], axis=0))
+slope7, intercept7, r_value7, p_value7, std_err7 = stats.linregress(np.mean(std_s[np.array(all_stats['region'] == 7)], axis=0), np.mean(np.array(all_e)[np.array(all_stats['region'] == 7)], axis=0))
+slope8, intercept8, r_value8, p_value8, std_err8 = stats.linregress(np.mean(std_s[np.array(all_stats['region'] == 8)], axis=0), np.mean(np.array(all_e)[np.array(all_stats['region'] == 8)], axis=0))
+
+x = np.arange(-2, 4, 1)
+    
+# Plot figure
+fig, ((ax1, ax2, ax3, ax4,), 
+      (ax5, ax6, ax7, ax8)) = plt.subplots(nrows=2, ncols=4, figsize=(12, 6), 
+                                      layout='constrained', sharey=True, sharex=True)
+
+ax1.scatter(np.mean(std_s[np.array(all_stats['region'] == 1)], axis=0), 
+            np.mean(np.array(all_e)[np.array(all_stats['region'] == 1)], axis=0), 
+            color='#0000a7', zorder=2, s=75, alpha=0.6)
+ax1.plot(x, x*slope1 + intercept1, color='k', lw=1)
+
+ax2.scatter(np.mean(std_s[np.array(all_stats['region'] == 2)], axis=0), 
+            np.mean(np.array(all_e)[np.array(all_stats['region'] == 2)], axis=0), 
+            color='#0000a7', zorder=2, s=75, alpha=0.6)
+ax2.plot(x, x*slope2 + intercept3, color='k', lw=1)
+
+ax3.scatter(np.mean(std_s[np.array(all_stats['region'] == 3)], axis=0), 
+            np.mean(np.array(all_e)[np.array(all_stats['region'] == 3)], axis=0), 
+            color='#0000a7', zorder=2, s=75, alpha=0.6)
+ax3.plot(x, x*slope3 + intercept3, color='k', lw=1)
+
+ax4.scatter(np.mean(std_s[np.array(all_stats['region'] == 4)], axis=0), 
+            np.mean(np.array(all_e)[np.array(all_stats['region'] == 4)], axis=0), 
+            color='#0000a7', zorder=2, s=75, alpha=0.6)
+ax4.plot(x, x*slope4 + intercept4, color='k', lw=1)
+
+ax5.scatter(np.mean(std_s[np.array(all_stats['region'] == 5)], axis=0), 
+            np.mean(np.array(all_e)[np.array(all_stats['region'] == 5)], axis=0), 
+            color='#0000a7', zorder=2, s=75, alpha=0.6)
+ax5.plot(x, x*slope5 + intercept5, color='k', lw=1)
+
+ax6.scatter(np.mean(std_s[np.array(all_stats['region'] == 6)], axis=0), 
+            np.mean(np.array(all_e)[np.array(all_stats['region'] == 6)], axis=0), 
+            color='#0000a7', zorder=2, s=75, alpha=0.6)
+ax6.plot(x, x*slope6 + intercept6, color='k', lw=1)
+
+ax7.scatter(np.mean(std_s[np.array(all_stats['region'] == 7)], axis=0), 
+            np.mean(np.array(all_e)[np.array(all_stats['region'] == 7)], axis=0), 
+            color='#0000a7', zorder=2, s=75, alpha=0.6)
+ax7.plot(x, x*slope7 + intercept7, color='k', lw=1)
+
+ax8.scatter(np.mean(std_s[np.array(all_stats['region'] == 8)], axis=0), 
+            np.mean(np.array(all_e)[np.array(all_stats['region'] == 8)], axis=0), 
+            color='#0000a7', zorder=2, s=75, alpha=0.6)
+ax8.plot(x, x*slope8 + intercept8, color='k', lw=1)
+
+ax5.set_xlabel('Standardized snowfall (m)', fontsize=14)
+ax6.set_xlabel('Standardized snowfall (m)', fontsize=14)
+ax7.set_xlabel('Standardized snowfall (m)', fontsize=14)
+ax8.set_xlabel('Standardized snowfall (m)', fontsize=14)
+
+ax1.set_ylabel('Timing of exposure (DOY)', fontsize=14)
+ax5.set_ylabel('Timing of exposure (DOY)', fontsize=14)
+
+for ax in [ax1, ax2, ax3, ax4, ax5, ax6, ax7, ax8]:
+    ax.tick_params(axis='both', which='major', labelsize=14)
+    ax.grid(ls='dashed', lw=1, zorder=1)
+    #ax.set_xlim(-2, 2.7)
+    #ax.set_ylim(150, 210)
+
+# Add stats
+textstr = '\n'.join((
+    r'R$^{2}$ = %.2f' % (r_value1**2),
+    r'slope = %.1f' % slope1,
+    r'p = %.3f' % p_value1))
+text_box = AnchoredText(textstr, frameon=True, loc=4, pad=0.5, prop=dict(size=13))
+text_box.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
+plt.setp(text_box.patch, facecolor='white', alpha=0.7)
+ax1.add_artist(text_box)
+
+textstr = '\n'.join((
+    r'R$^{2}$ = %.2f' % (r_value2**2),
+    r'slope = %.1f' %slope2,
+    r'p < %.3f' % 0.001))
+text_box = AnchoredText(textstr, frameon=True, loc=4, pad=0.5, prop=dict(size=13))
+text_box.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
+plt.setp(text_box.patch, facecolor='white', alpha=0.7)
+ax2.add_artist(text_box)
+
+textstr = '\n'.join((
+    r'R$^{2}$ = %.2f' % (r_value3**2),
+    r'slope = %.1f' %slope3,
+    r'p < %.3f' % 0.001))
+text_box = AnchoredText(textstr, frameon=True, loc=1, pad=0.5, prop=dict(size=13))
+text_box.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
+plt.setp(text_box.patch, facecolor='white', alpha=0.7)
+ax3.add_artist(text_box)
+
+textstr = '\n'.join((
+    r'R$^{2}$ = %.2f' % (r_value4**2),
+    r'slope = %.1f' %slope4,
+    r'p = %.3f' % p_value4))
+text_box = AnchoredText(textstr, frameon=True, loc=4, pad=0.5, prop=dict(size=13))
+text_box.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
+plt.setp(text_box.patch, facecolor='white', alpha=0.7)
+ax4.add_artist(text_box)
+
+textstr = '\n'.join((
+    r'R$^{2}$ = %.2f' % (r_value5**2),
+    r'slope = %.1f' %slope5,
+    r'p = %.3f' % p_value5))
+text_box = AnchoredText(textstr, frameon=True, loc=4, pad=0.5, prop=dict(size=13))
+text_box.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
+plt.setp(text_box.patch, facecolor='white', alpha=0.7)
+ax5.add_artist(text_box)
+
+textstr = '\n'.join((
+    r'R$^{2}$ = %.2f' % (r_value6**2),
+    r'slope = %.1f' %slope6,
+    r'p = %.3f' % p_value6))
+text_box = AnchoredText(textstr, frameon=True, loc=4, pad=0.5, prop=dict(size=13))
+text_box.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
+plt.setp(text_box.patch, facecolor='white', alpha=0.7)
+ax6.add_artist(text_box)
+
+textstr = '\n'.join((
+    r'R$^{2}$ = %.2f' % (r_value7**2),
+    r'slope = %.1f' % slope7,
+    r'p = %.3f' % p_value7))
+text_box = AnchoredText(textstr, frameon=True, loc=4, pad=0.5, prop=dict(size=13))
+text_box.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
+plt.setp(text_box.patch, facecolor='white', alpha=0.7)
+ax7.add_artist(text_box)
+
+textstr = '\n'.join((
+    r'R$^{2}$ = %.2f' % (r_value8**2),
+    r'slope = %.1f' %slope8,
+    r'p = %.3f' % p_value8))
+text_box = AnchoredText(textstr, frameon=True, loc=4, pad=0.5, prop=dict(size=13))
+text_box.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
+plt.setp(text_box.patch, facecolor='white', alpha=0.7)
+ax8.add_artist(text_box)
+
+ax1.text(0.03, 0.89, "a", fontsize=24, transform=ax1.transAxes)
+ax2.text(0.03, 0.87, "b", fontsize=24, transform=ax2.transAxes)
+ax3.text(0.03, 0.89, "c", fontsize=24, transform=ax3.transAxes)
+ax4.text(0.03, 0.87, "d", fontsize=24, transform=ax4.transAxes)
+ax5.text(0.03, 0.89, "e", fontsize=24, transform=ax5.transAxes)
+ax6.text(0.03, 0.87, "f", fontsize=24, transform=ax6.transAxes)
+ax7.text(0.03, 0.89, "g", fontsize=24, transform=ax7.transAxes)
+ax8.text(0.03, 0.87, "h", fontsize=24, transform=ax8.transAxes)
+
+ax1.text(0.40, 1.02, "North", fontsize=16, transform=ax1.transAxes)
+ax2.text(0.30, 1.02, "North East", fontsize=16, transform=ax2.transAxes)
+ax3.text(0.38, 1.02, "East", fontsize=16, transform=ax3.transAxes)
+ax4.text(0.32, 1.02, "South East", fontsize=16, transform=ax4.transAxes)
+ax5.text(0.38, 1.02, "South", fontsize=16, transform=ax5.transAxes)
+ax6.text(0.32, 1.02, "South West", fontsize=16, transform=ax6.transAxes)
+ax7.text(0.36, 1.02, "West", fontsize=16, transform=ax7.transAxes)
+ax8.text(0.32, 1.02, "North West", fontsize=16, transform=ax8.transAxes)
+
+fig.savefig(savepath + 'fig_sxa_sensitivity_analysis.pdf')
+
+#%%
+
+# Average by region
+slope1, intercept1, r_value1, p_value1, std_err1 = stats.linregress(np.mean(std_t[np.array(all_stats['region'] == 1)], axis=0), np.mean(np.array(all_e)[np.array(all_stats['region'] == 1)], axis=0))
+slope2, intercept2, r_value2, p_value2, std_err2 = stats.linregress(np.mean(std_t[np.array(all_stats['region'] == 2)], axis=0), np.mean(np.array(all_e)[np.array(all_stats['region'] == 2)], axis=0))
+slope3, intercept3, r_value3, p_value3, std_err3 = stats.linregress(np.mean(std_t[np.array(all_stats['region'] == 3)], axis=0), np.mean(np.array(all_e)[np.array(all_stats['region'] == 3)], axis=0))
+slope4, intercept4, r_value4, p_value4, std_err4 = stats.linregress(np.mean(std_t[np.array(all_stats['region'] == 4)], axis=0), np.mean(np.array(all_e)[np.array(all_stats['region'] == 4)], axis=0))
+slope5, intercept5, r_value5, p_value5, std_err5 = stats.linregress(np.mean(std_t[np.array(all_stats['region'] == 5)], axis=0), np.mean(np.array(all_e)[np.array(all_stats['region'] == 5)], axis=0))
+slope6, intercept6, r_value6, p_value6, std_err6 = stats.linregress(np.mean(std_t[np.array(all_stats['region'] == 6)], axis=0), np.mean(np.array(all_e)[np.array(all_stats['region'] == 6)], axis=0))
+slope7, intercept7, r_value7, p_value7, std_err7 = stats.linregress(np.mean(std_t[np.array(all_stats['region'] == 7)], axis=0), np.mean(np.array(all_e)[np.array(all_stats['region'] == 7)], axis=0))
+slope8, intercept8, r_value8, p_value8, std_err8 = stats.linregress(np.mean(std_t[np.array(all_stats['region'] == 8)], axis=0), np.mean(np.array(all_e)[np.array(all_stats['region'] == 8)], axis=0))
+
+x = np.arange(-2, 4, 1)
+    
+# Plot figure
+fig, ((ax1, ax2, ax3, ax4,), 
+      (ax5, ax6, ax7, ax8)) = plt.subplots(nrows=2, ncols=4, figsize=(12, 6), 
+                                      layout='constrained', sharey=True, sharex=True)
+
+ax1.scatter(np.mean(std_t[np.array(all_stats['region'] == 1)], axis=0), 
+            np.mean(np.array(all_e)[np.array(all_stats['region'] == 1)], axis=0), 
+            color='#c1272d', zorder=2, s=75, alpha=0.6)
+ax1.plot(x, x*slope1 + intercept1, color='k', lw=1)
+
+ax2.scatter(np.mean(std_t[np.array(all_stats['region'] == 2)], axis=0), 
+            np.mean(np.array(all_e)[np.array(all_stats['region'] == 2)], axis=0), 
+            color='#c1272d', zorder=2, s=75, alpha=0.6)
+ax2.plot(x, x*slope2 + intercept3, color='k', lw=1)
+
+ax3.scatter(np.mean(std_t[np.array(all_stats['region'] == 3)], axis=0), 
+            np.mean(np.array(all_e)[np.array(all_stats['region'] == 3)], axis=0), 
+            color='#c1272d', zorder=2, s=75, alpha=0.6)
+ax3.plot(x, x*slope3 + intercept3, color='k', lw=1)
+
+ax4.scatter(np.mean(std_t[np.array(all_stats['region'] == 4)], axis=0), 
+            np.mean(np.array(all_e)[np.array(all_stats['region'] == 4)], axis=0), 
+            color='#c1272d', zorder=2, s=75, alpha=0.6)
+ax4.plot(x, x*slope4 + intercept4, color='k', lw=1)
+
+ax5.scatter(np.mean(std_t[np.array(all_stats['region'] == 5)], axis=0), 
+            np.mean(np.array(all_e)[np.array(all_stats['region'] == 5)], axis=0), 
+            color='#c1272d', zorder=2, s=75, alpha=0.6)
+ax5.plot(x, x*slope5 + intercept5, color='k', lw=1)
+
+ax6.scatter(np.mean(std_t[np.array(all_stats['region'] == 6)], axis=0), 
+            np.mean(np.array(all_e)[np.array(all_stats['region'] == 6)], axis=0), 
+            color='#c1272d', zorder=2, s=75, alpha=0.6)
+ax6.plot(x, x*slope6 + intercept6, color='k', lw=1)
+
+ax7.scatter(np.mean(std_t[np.array(all_stats['region'] == 7)], axis=0), 
+            np.mean(np.array(all_e)[np.array(all_stats['region'] == 7)], axis=0), 
+            color='#c1272d', zorder=2, s=75, alpha=0.6)
+ax7.plot(x, x*slope7 + intercept7, color='k', lw=1)
+
+ax8.scatter(np.mean(std_t[np.array(all_stats['region'] == 8)], axis=0), 
+            np.mean(np.array(all_e)[np.array(all_stats['region'] == 8)], axis=0), 
+            color='#c1272d', zorder=2, s=75, alpha=0.6)
+ax8.plot(x, x*slope8 + intercept8, color='k', lw=1)
+
+ax5.set_xlabel('Standardized PDD June (K)', fontsize=14)
+ax6.set_xlabel('Standardized PDD June (K)', fontsize=14)
+ax7.set_xlabel('Standardized PDD June (K)', fontsize=14)
+ax8.set_xlabel('Standardized PDD June (K)', fontsize=14)
+
+ax1.set_ylabel('Timing of exposure (DOY)', fontsize=14)
+ax5.set_ylabel('Timing of exposure (DOY)', fontsize=14)
+
+for ax in [ax1, ax2, ax3, ax4, ax5, ax6, ax7, ax8]:
+    ax.tick_params(axis='both', which='major', labelsize=14)
+    ax.grid(ls='dashed', lw=1, zorder=1)
+    #ax.set_xlim(-2, 2.7)
+    #ax.set_ylim(150, 210)
+
+# Add stats
+textstr = '\n'.join((
+    r'R$^{2}$ = %.2f' % (r_value1**2),
+    r'slope = %.1f' % slope1,
+    r'p < %.3f' % 0.001))
+text_box = AnchoredText(textstr, frameon=True, loc=3, pad=0.5, prop=dict(size=13))
+text_box.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
+plt.setp(text_box.patch, facecolor='white', alpha=0.7)
+ax1.add_artist(text_box)
+
+textstr = '\n'.join((
+    r'R$^{2}$ = %.2f' % (r_value2**2),
+    r'slope = %.1f' %slope2,
+    r'p = %.3f' % p_value2))
+text_box = AnchoredText(textstr, frameon=True, loc=1, pad=0.5, prop=dict(size=13))
+text_box.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
+plt.setp(text_box.patch, facecolor='white', alpha=0.7)
+ax2.add_artist(text_box)
+
+textstr = '\n'.join((
+    r'R$^{2}$ = %.2f' % (r_value3**2),
+    r'slope = %.1f' %slope3,
+    r'p = %.3f' % p_value3))
+text_box = AnchoredText(textstr, frameon=True, loc=1, pad=0.5, prop=dict(size=13))
+text_box.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
+plt.setp(text_box.patch, facecolor='white', alpha=0.7)
+ax3.add_artist(text_box)
+
+textstr = '\n'.join((
+    r'R$^{2}$ = %.2f' % (r_value4**2),
+    r'slope = %.1f' %slope4,
+    r'p = %.3f' % p_value4))
+text_box = AnchoredText(textstr, frameon=True, loc=3, pad=0.5, prop=dict(size=13))
+text_box.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
+plt.setp(text_box.patch, facecolor='white', alpha=0.7)
+ax4.add_artist(text_box)
+
+textstr = '\n'.join((
+    r'R$^{2}$ = %.2f' % (r_value5**2),
+    r'slope = %.1f' %slope5,
+    r'p < %.3f' % 0.001))
+text_box = AnchoredText(textstr, frameon=True, loc=3, pad=0.5, prop=dict(size=13))
+text_box.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
+plt.setp(text_box.patch, facecolor='white', alpha=0.7)
+ax5.add_artist(text_box)
+
+textstr = '\n'.join((
+    r'R$^{2}$ = %.2f' % (r_value6**2),
+    r'slope = %.1f' %all_stats['coeffs_t'][ids[2]],
+    r'p < %.3f' % 0.001))
+text_box = AnchoredText(textstr, frameon=True, loc=3, pad=0.5, prop=dict(size=13))
+text_box.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
+plt.setp(text_box.patch, facecolor='white', alpha=0.7)
+ax6.add_artist(text_box)
+
+textstr = '\n'.join((
+    r'R$^{2}$ = %.2f' % (r_value7**2),
+    r'slope = %.1f' % slope7,
+    r'p < %.3f' % 0.001))
+text_box = AnchoredText(textstr, frameon=True, loc=3, pad=0.5, prop=dict(size=13))
+text_box.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
+plt.setp(text_box.patch, facecolor='white', alpha=0.7)
+ax7.add_artist(text_box)
+
+textstr = '\n'.join((
+    r'R$^{2}$ = %.2f' % (r_value8**2),
+    r'slope = %.1f' %slope8,
+    r'p < %.3f' % 0.001))
+text_box = AnchoredText(textstr, frameon=True, loc=3, pad=0.5, prop=dict(size=13))
+text_box.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
+plt.setp(text_box.patch, facecolor='white', alpha=0.7)
+ax8.add_artist(text_box)
+
+ax1.text(0.03, 0.89, "a", fontsize=24, transform=ax1.transAxes)
+ax2.text(0.03, 0.87, "b", fontsize=24, transform=ax2.transAxes)
+ax3.text(0.03, 0.89, "c", fontsize=24, transform=ax3.transAxes)
+ax4.text(0.03, 0.87, "d", fontsize=24, transform=ax4.transAxes)
+ax5.text(0.03, 0.89, "e", fontsize=24, transform=ax5.transAxes)
+ax6.text(0.03, 0.87, "f", fontsize=24, transform=ax6.transAxes)
+ax7.text(0.03, 0.89, "g", fontsize=24, transform=ax7.transAxes)
+ax8.text(0.03, 0.87, "h", fontsize=24, transform=ax8.transAxes)
+
+ax1.text(0.40, 1.02, "North", fontsize=16, transform=ax1.transAxes)
+ax2.text(0.30, 1.02, "North East", fontsize=16, transform=ax2.transAxes)
+ax3.text(0.38, 1.02, "East", fontsize=16, transform=ax3.transAxes)
+ax4.text(0.32, 1.02, "South East", fontsize=16, transform=ax4.transAxes)
+ax5.text(0.38, 1.02, "South", fontsize=16, transform=ax5.transAxes)
+ax6.text(0.32, 1.02, "South West", fontsize=16, transform=ax6.transAxes)
+ax7.text(0.36, 1.02, "West", fontsize=16, transform=ax7.transAxes)
+ax8.text(0.32, 1.02, "North West", fontsize=16, transform=ax8.transAxes)
+
+
+fig.savefig(savepath + 'fig_sxb_sensitivity_analysis.pdf')
 
 #%%
 

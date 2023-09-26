@@ -19,7 +19,7 @@ import statsmodels.api as sm
 from matplotlib.offsetbox import AnchoredText
 
 # Define user
-user = 'jryan4'
+user = 'johnnyryan'
 
 # Define path
 path = '/Users/' + user + '/Dropbox (University of Oregon)/research/snowfall/data/'
@@ -66,18 +66,12 @@ def compile_dfs(column):
 
 #%%
 
-all_s, elev = compile_dfs('max_snow')
+all_s, elev = compile_dfs('snow_sum')
 all_jun, elev = compile_dfs('jun_pdd')
-all_jul, elev = compile_dfs('jul_pdd')
-all_jm, elev = compile_dfs('jun_temp')
-all_spr, elev = compile_dfs('spr_temp')
 all_e, elev = compile_dfs('first_55_median')
 
 # Remove months when June PDD is zero
 all_s = all_s[all_jun.mean(axis=1) != 0]
-all_jul = all_jm[all_jun.mean(axis=1) != 0]
-all_jm = all_jm[all_jun.mean(axis=1) != 0]
-all_spr = all_spr[all_jun.mean(axis=1) != 0]
 all_e = all_e[all_jun.mean(axis=1) != 0]
 elev = elev[all_jun.mean(axis=1) != 0]
 all_jun = all_jun[all_jun.mean(axis=1) != 0]
@@ -91,7 +85,6 @@ p_values_t = []
 p_values_s = []
 std_t = []
 std_s = []
-coeffs_t_per_k = []
 
 # Compute coefficients
 for i in range(all_e.shape[0]):
@@ -119,9 +112,6 @@ for i in range(all_e.shape[0]):
     X = sm.add_constant(X)
     results = sm.OLS(y, X).fit()
     
-    # Compute non-standardized linear regression
-    slope3, intercept3, r_value3, p_value3, std_err3 = stats.linregress(all_jm.iloc[i].values, 
-                                                                        e)
     # Append
     coeffs_t.append(results.params[1])
     coeffs_s.append(results.params[2])
@@ -131,15 +121,13 @@ for i in range(all_e.shape[0]):
     p_values_s.append(results.pvalues[2])
     std_t.append(np.std(all_jun.iloc[i].values))
     std_s.append(np.std(all_s.iloc[i].values))
-    coeffs_t_per_k.append(slope3)
 
 #%%
 all_stats = pd.DataFrame([elev['elevation'].values, elev['region'].values, 
                           std_t, std_s, coeffs_t, coeffs_s, r_values_t, r_values_s, 
-                          p_values_t, p_values_s, coeffs_t_per_k]).T
+                          p_values_t, p_values_s]).T
 all_stats.columns = ['elev', 'region', 'std_t', 'std_s', 'coeffs_t', 'coeffs_s', 
-                     'r_values_t', 'r_values_s', 'p_values_t', 'p_values_s', 
-                     'coeffs_t_per_k']
+                     'r_values_t', 'r_values_s', 'p_values_t', 'p_values_s']
 
 # Get grid cell index
 all_s_idx = all_s.reset_index()
