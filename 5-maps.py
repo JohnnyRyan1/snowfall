@@ -119,6 +119,19 @@ second_cmap[:,-1] = np.linspace(0, 1, cmap.N)
 # Create new colormap
 second_cmap = ListedColormap(second_cmap)
 
+# make a color map of fixed colors
+cmap = colors.ListedColormap(['white', 'orange'])
+bounds=[0,0.5,1]
+norm = colors.BoundaryNorm(bounds, cmap.N)
+
+third_cmap = cmap(np.arange(cmap.N))
+
+# Set alpha
+third_cmap[:,-1] = np.linspace(0, 1, cmap.N)
+
+# Create new colormap
+third_cmap = ListedColormap(third_cmap)
+
 #%%
 
 # Read stats DataFrame
@@ -138,6 +151,24 @@ empty[all_stats['grid_cell_j'].iloc[ids[2]], all_stats['grid_cell_i'].iloc[ids[2
 
 #%%
 
+# Identify three indexes in different regions
+ids = [20, 64, 101, 115, 21, 198]
+
+# NW, NW, W, SW, N, NE, N
+
+# Define zero array
+empty1 = np.zeros((merra['t2m'].shape[1], merra['t2m'].shape[2]))
+
+# Assign value
+empty1[all_stats['grid_cell_j'].iloc[ids[0]], all_stats['grid_cell_i'].iloc[ids[0]]] = 1
+empty1[all_stats['grid_cell_j'].iloc[ids[1]], all_stats['grid_cell_i'].iloc[ids[1]]] = 1
+empty1[all_stats['grid_cell_j'].iloc[ids[2]], all_stats['grid_cell_i'].iloc[ids[2]]] = 1
+empty1[all_stats['grid_cell_j'].iloc[ids[3]], all_stats['grid_cell_i'].iloc[ids[3]]] = 1
+empty1[all_stats['grid_cell_j'].iloc[ids[4]], all_stats['grid_cell_i'].iloc[ids[4]]] = 1
+empty1[all_stats['grid_cell_j'].iloc[ids[5]], all_stats['grid_cell_i'].iloc[ids[5]]] = 1
+
+#%%
+
 fig, ax1 = plt.subplots(nrows=1, ncols=1, figsize=(15,15), layout='constrained')
 ax1.set_aspect('equal', adjustable='box')
 
@@ -145,6 +176,8 @@ ax1.pcolormesh(ds_data['x'], ds_data['y'], squares, edgecolor='k',
                cmap=my_cmap, norm=norm)
 ax1.pcolormesh(ds_data['x'], ds_data['y'], empty, edgecolor='k',
                cmap=second_cmap, norm=norm)
+ax1.pcolormesh(ds_data['x'], ds_data['y'], empty1, edgecolor='k',
+               cmap=third_cmap, norm=norm)
 ax1.tick_params(labelbottom=False)   
 ax1.tick_params(labelleft=False)   
 fig.savefig(savepath + 'fig_sx_maps.pdf')
