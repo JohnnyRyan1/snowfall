@@ -152,9 +152,9 @@ empty[all_stats['grid_cell_j'].iloc[ids[2]], all_stats['grid_cell_i'].iloc[ids[2
 #%%
 
 # Identify three indexes in different regions
-ids = [20, 64, 101, 115, 21, 198]
+ids = [115, 21, 198, 101, 64, 20]
 
-# NW, NW, W, SW, N, NE, N
+# N, N, NE, SW, CW, NW
 
 # Define zero array
 empty1 = np.zeros((merra['t2m'].shape[1], merra['t2m'].shape[2]))

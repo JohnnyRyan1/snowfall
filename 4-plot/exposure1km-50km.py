@@ -161,13 +161,15 @@ ax4.text(0.03, 0.87, "d", fontsize=20, transform=ax4.transAxes)
 ax5.text(0.87, 0.89, "e", fontsize=20, transform=ax5.transAxes)
 ax6.text(0.03, 0.87, "f", fontsize=20, transform=ax6.transAxes)
 
-ax1.text(0.03, 0.72, "N", fontsize=16, transform=ax1.transAxes)
-ax2.text(0.03, 0.70, "N", fontsize=16, transform=ax2.transAxes)
-ax3.text(0.03, 0.72, "NE", fontsize=16, transform=ax3.transAxes)
-ax4.text(0.03, 0.70, "SW", fontsize=16, transform=ax4.transAxes)
-ax5.text(0.82, 0.72, "CW", fontsize=16, transform=ax5.transAxes)
-ax6.text(0.03, 0.70, "NW", fontsize=16, transform=ax6.transAxes)
-
+# =============================================================================
+# ax1.text(0.03, 0.72, "N", fontsize=16, transform=ax1.transAxes)
+# ax2.text(0.03, 0.70, "N", fontsize=16, transform=ax2.transAxes)
+# ax3.text(0.03, 0.72, "NE", fontsize=16, transform=ax3.transAxes)
+# ax4.text(0.03, 0.70, "SW", fontsize=16, transform=ax4.transAxes)
+# ax5.text(0.82, 0.72, "CW", fontsize=16, transform=ax5.transAxes)
+# ax6.text(0.03, 0.70, "NW", fontsize=16, transform=ax6.transAxes)
+# 
+# =============================================================================
 fig.savefig(savepath + 'fig_sx_exposure-plots.png', dpi=300)
 
 
